@@ -223,6 +223,8 @@ function [generator, discriminator, stateG, stateD] = processEpoch(generator, di
         end
     end
     
+    generator.reset();
+    discriminator.reset();
     generator.move('cpu');
     discriminator.move('cpu');
 end

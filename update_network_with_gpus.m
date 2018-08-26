@@ -4,10 +4,11 @@ function state = update_network_with_gpus(net, state, params, parserv)
     
     for p=1:numel(net.params)
         if ~isempty(parserv)
-            parDer = parserv.pullWithIndex(p) / numWorkers;
+            parDer = parserv.pullWithIndex(p);
         else
-            parDer = net.params(p).der / numWorkers;
+            parDer = net.params(p).der ;
         end
+        parDer = parDer / numWorkers;
         
         switch net.params(p).trainMethod
             case 'average'

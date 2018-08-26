@@ -23,7 +23,6 @@ function net = discriminator_init()
     net.initParams();
     % set precious = 1, let the loss var in network will not be clean after
     % forward propagation
-    net.vars(net.getVarIndex('conv_5_output')).precious = 1;
     net.vars(net.getVarIndex('loss')).precious = 1;
 end
 

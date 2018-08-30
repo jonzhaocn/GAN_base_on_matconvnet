@@ -3,14 +3,14 @@ function net = discriminator_init()
     
     last_added.channels = 1;
     last_added.var = 'images';
-    
-    [net, last_added] = add_discriminator_block(net, 'block_1', last_added, 3, 1, 0, 1, 16);
-    [net, last_added] = add_discriminator_block(net, 'block_2', last_added, 3, 2, 0, 1, 32);
-    [net, last_added] = add_discriminator_block(net, 'block_3', last_added, 3, 1, 0, 1, 32);
-    [net, last_added] = add_discriminator_block(net, 'block_4', last_added, 3, 2, 0, 1, 16);
-    
+    % conv
+    [net, last_added] = add_discriminator_block(net, 'block_1', last_added, 3, 2, 1, 1, 16);
+    [net, last_added] = add_discriminator_block(net, 'block_2', last_added, 3, 2, 1, 1, 32);
+    [net, last_added] = add_discriminator_block(net, 'block_3', last_added, 3, 2, 1, 1, 64);
+    [net, last_added] = add_discriminator_block(net, 'block_4', last_added, 4, 1, 0, 1, 128);
+    % fully connect
     net.addLayer('conv_5_layer',... % layer name
-        dagnn.Conv('size', [4,4,last_added.channels,1], 'stride', 1, 'pad', 0, 'dilate', 1, 'hasBias', true),... % layer
+        dagnn.Conv('size', [1,1,last_added.channels,1], 'stride', 1, 'pad', 0, 'dilate', 1, 'hasBias', true),... % layer
         last_added.var,... % input var name
         'conv_5_output',... % output var name
         {'conv_5_filters', 'conv_5_biases'}); % params name

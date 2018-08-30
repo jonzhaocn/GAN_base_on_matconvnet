@@ -3,21 +3,22 @@ function net = generator_init()
 
     last_added.var = 'noises';
     last_added.channels = 100;
-    [net, last_added] = add_generator_bolck(net, 'block_1', last_added, 3, 1, 0, 64);
-    [net, last_added] = add_generator_bolck(net, 'block_2', last_added, 3, 2, 0, 32);
-    [net, last_added] = add_generator_bolck(net, 'block_3', last_added, 5, 1, 0, 32);
-    [net, last_added] = add_generator_bolck(net, 'block_4', last_added, 3, 2, 0, 32);
-    [net, last_added] = add_generator_bolck(net, 'block_5', last_added, 3, 1, 0, 16);
+    % fully connect
+    [net, last_added] = add_generator_bolck(net, 'block_1', last_added, 4, 1, 0, 128);
+    % deconv
+    [net, last_added] = add_generator_bolck(net, 'block_2', last_added, 3, 2, 1, 64);
+    [net, last_added] = add_generator_bolck(net, 'block_3', last_added, 3, 2, 1, 32);
+    [net, last_added] = add_generator_bolck(net, 'block_4', last_added, 3, 2, 1, 16);
     
-    net.addLayer('convt_6',... % layer name
-        dagnn.ConvTranspose('size', [4,4,1,16], 'upsample', 1, 'crop', 0, 'hasBias', true),... % layer
+    net.addLayer('convt_5',... % layer name
+        dagnn.ConvTranspose('size', [4,4,1,last_added.channels], 'upsample', 1, 'crop', 0, 'hasBias', true),... % layer
         last_added.var,... % input var name
-        'convt_6_output',...% output var name
-        {'convt_6_filters', 'convt_6_biases'}); % params name
+        'convt_5_output',...% output var name
+        {'convt_5_filters', 'convt_5_biases'}); % params name
 
     net.addLayer('sigmoid_layer', ...
         dagnn.Sigmoid(), ...
-        'convt_6_output',...
+        'convt_5_output',...
         'generator_output');
 
     net.initParams();
